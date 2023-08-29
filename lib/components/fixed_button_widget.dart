@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_application/components/gradient_button_widget.dart';
+import 'package:hotel_application/screens/reservation_screen.dart';
+import 'package:hotel_application/utilitis/extension/nav.dart';
 import 'package:hotel_application/utilitis/extension/screen_size.dart';
 import 'package:hotel_application/models/hotel.dart';
 
@@ -39,7 +41,11 @@ class FixedButton extends StatelessWidget {
             const Spacer(),
             GradientButtonWidget(
               text: 'Book Now',
-              onPressed: () {},
+              onPressed: () {
+                ReservationScreen(
+                  hotelObject: hotelObject,
+                ).push(context);
+              },
               width: 200,
             )
           ],

@@ -28,16 +28,16 @@ class MyBookingScreen extends StatelessWidget {
         itemCount: reserveList.length,
         itemBuilder: (context, index) {
           return InkWell(
-            onTap: () {
-              
-            },
-            child: HotelCard(
-                path: hotelWReserve[index].hotelImage ??
-                    'https://www.hotel.de/de/media/image/fb/62/a7/Fairmont_Jakarta-Jakarta-Hotel_outdoor_area-1-685582_600x600.jpg',
-                title: hotelWReserve[index].hotelName ?? 'Fairnot hotel',
-                subtitle1:
-                    '${reserveList[index].nightsBooked}/Nights booked at date ${reserveList[index].date}',
-                price: reserveList[index].price ?? 150),
+            onTap: () {},
+            child: hotelWReserve.isNotEmpty
+                ? HotelCard(
+                    path: hotelWReserve[index].hotelImage ??
+                        'https://www.hotel.de/de/media/image/fb/62/a7/Fairmont_Jakarta-Jakarta-Hotel_outdoor_area-1-685582_600x600.jpg',
+                    title: hotelWReserve[index].hotelName ?? 'Fairnot hotel',
+                    subtitle1:
+                        '${reserveList[index].nightsBooked}/Nights booked at date ${reserveList[index].date}',
+                    price: reserveList[index].price ?? 150)
+                : const Text('you dont have any reservation yet'),
           );
         },
       ),

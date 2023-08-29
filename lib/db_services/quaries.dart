@@ -42,25 +42,31 @@ class SupabaseViewServices {
 
   Future<List<HotelModel>> getHotelInfoforReservation(String userId) async {
     List<HotelModel> hotels = [];
-    final hotelId = await supabase
+    final hotelIdList = await supabase
         .from('reservation')
         .select('hotel_id')
         .eq('user_id', userId);
-    print(hotelId.runtimeType);
+    print(hotelIdList.runtimeType);
+    print("***** $hotelIdList");
 
-    if (hotelId == null) {
+    if (hotelIdList.isEmpty) {
+      print("&&");
       return hotels;
     } else {
-      final rawHotels = await supabase
-          .from('hotel')
-          .select(
-              'hotel_id, hotel_name, hotel_city, room_price, num_rooms, hotel_image')
-          .eq('hotel_id', '8c5c1bed-14b0-4704-a6d3-a876a1a48668');
-      for (var element in rawHotels) {
-        hotels.add(HotelModel.fromJson(element));
+      for (final element in hotelIdList) {
+        print("&&");
+        final rawHotels = await supabase
+            .from('hotel')
+            .select(
+                'hotel_id, hotel_name, hotel_city, room_price, num_rooms, hotel_image')
+            .eq('hotel_id', element["hotel_id"]);
+
+        print("*********** $rawHotels");
+
+        hotels.add(HotelModel.fromJson(rawHotels[0]));
       }
     }
-
+    print("### $hotels");
     return hotels;
   }
 

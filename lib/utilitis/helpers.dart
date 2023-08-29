@@ -46,3 +46,33 @@ getFutureWidget() async {
     },
   );
 }
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+List<HotelModel> hotelInfoforReservationList = [];
+
+Future<void> getAllInfo() async {
+  hotelInfoforReservationList =
+      await SupabaseViewServices().getHotelInfoforReservation(currentUserId!);
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: SupabaseViewServices().getReservationByUserId(currentUserId!),
+      builder: (context, snapshot) {
+        final list = snapshot.data;
+
+        return MyBookingScreen(
+            reserveList: list ?? [],
+            hotelWReserve: hotelInfoforReservationList);
+      },
+    );
+  }
+}

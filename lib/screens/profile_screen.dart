@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_application/app.dart';
 import 'package:hotel_application/components/bottom_nav.dart';
 import 'package:hotel_application/constants/colors.dart';
 import 'package:hotel_application/db_services/services.dart';
@@ -64,6 +65,10 @@ class Profile extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 SupabaseClass.supabase.auth.signOut();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    (MaterialPageRoute(builder: (context) => App())),
+                    (route) => false);
               },
               child: const Text(
                 'Sign out',

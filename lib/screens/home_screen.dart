@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hotel_application/components/bottom_nav.dart';
 import 'package:hotel_application/components/city_card_widget.dart';
@@ -6,9 +8,9 @@ import 'package:hotel_application/components/hotel_card_widget.dart';
 import 'package:hotel_application/components/searchBar_widget.dart';
 import 'package:hotel_application/constants/colors.dart';
 import 'package:hotel_application/constants/spaces.dart';
-import 'package:hotel_application/db_services/quaries.dart';
 import 'package:hotel_application/db_services/services.dart';
 import 'package:hotel_application/screens/all_hotels_screen.dart';
+import 'package:hotel_application/screens/hotel_screen.dart';
 import 'package:hotel_application/utilitis/extension/nav.dart';
 import 'package:hotel_application/screens/AllCities_screen.dart';
 import 'package:hotel_application/screens/search_by_city.dart';
@@ -76,69 +78,87 @@ class Home extends StatelessWidget {
                     kWSpace8,
                   ]),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
                   children: [
-                    const Text(
-                      'Favorite place to holiday',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          FutureBuilder(
-                            future: SupabaseViewServices().getHotelsInfo(),
-                            builder: (context, snapshot) {
-                              final list = snapshot.data;
-                              return HotelsScreen(hotelList: list ?? []);
-                            },
-                          );
-                        },
-                        child: const Text('See all')),
-                  ],
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(children: [
                     FutureBuilder(
-                        future: SupabaseClass().getAllHotels(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                              child: LoadingAnimationWidget.newtonCradle(
-                                color: AppColors.primary,
-                                size: 150,
-                              ),
-                            );
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            final hotel = snapshot.data;
+                      future: SupabaseClass().getAllHotels(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: LoadingAnimationWidget.newtonCradle(
+                              color: AppColors.primary,
+                              size: 150,
+                            ),
+                          );
+                        }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          final hotel = snapshot.data;
 
-                            return Row(
-                              children: [
-                                for (var index = 0; index < 6; index++) ...[
-                                  Row(
-                                    children: [
-                                      HotelCard(
-                                          path: hotel?[index].hotelImage ?? '',
-                                          title: hotel?[index].hotelName ?? '',
-                                          subtitle1:
-                                              hotel?[index].hotelCity ?? '',
-                                          price:
-                                              hotel?[index].roomPrice ?? 0.0),
-                                      kWSpace16
-                                    ],
-                                  )
-                                ]
-                              ],
-                            );
-                          } else {
-                            return const Text("Sorry..");
-                          }
-                        })
-                  ]),
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Favorite place to holiday',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        log('display');
+                                        HotelsScreen(hotelList: hotel ?? [])
+                                            .push(context);
+                                      },
+                                      child: const Text('See all')),
+                                ],
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    for (var index = 0; index < 6; index++) ...[
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              AllHotels(
+                                                      hotelObject:
+                                                          hotel![index])
+                                                  .push(context);
+                                            },
+                                            child: HotelCard(
+                                                path:
+                                                    hotel?[index].hotelImage ??
+                                                        '',
+                                                title:
+                                                    hotel?[index].hotelName ??
+                                                        '',
+                                                subtitle1:
+                                                    hotel?[index].hotelCity ??
+                                                        '',
+                                                price:
+                                                    hotel?[index].roomPrice ??
+                                                        0.0),
+                                          ),
+                                          kWSpace16
+                                        ],
+                                      )
+                                    ]
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const Text("Sorry..");
+                        }
+                      },
+                    ),
+                  ],
                 )
               ],
             ),

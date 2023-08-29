@@ -3,7 +3,6 @@ import 'package:hotel_application/app.dart';
 import 'package:hotel_application/db_services/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 final currentUserId = SupabaseClass.supabase.auth.currentSession?.user.id;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

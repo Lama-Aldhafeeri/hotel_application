@@ -5,6 +5,7 @@ import 'package:hotel_application/components/gradient_button_widget.dart';
 import 'package:hotel_application/components/image_widget.dart';
 import 'package:hotel_application/components/textfield_widget.dart';
 import 'package:hotel_application/constants/spaces.dart';
+import 'package:hotel_application/utilitis/extension/nav.dart';
 import 'package:hotel_application/utilitis/extension/screen_size.dart';
 import 'package:hotel_application/utilitis/helpers.dart';
 import 'package:hotel_application/models/hotel.dart';
@@ -129,7 +130,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                               nights: int.tryParse(nightsController.text)),
                         );
                         SupabaseViewServices().insertReservation(object);
-                        getFutureWidget().push;
+                        MyWidget().push(context);
                       } else {
                         ElegantNotification.info(
                                 title: const Text("Info"),
